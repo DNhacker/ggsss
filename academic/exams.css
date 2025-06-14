@@ -1,0 +1,963 @@
+ :root {
+            --light-green: #c2d8c5;
+            --dark-green: #222512;
+            --primary-green: #418812;
+            --medium-brown: #2d2512;
+            --dark-brown: #412812;
+            --cream: rgba(201, 193, 177, 0.9);
+            --ocean-deep: #0a3250;
+            --ocean-mid: #1e4b6e;
+            --ocean-light: #63a7bf;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Judson', 'Segoe UI', serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom,
+                var(--ocean-light),
+                var(--ocean-mid),
+                var(--ocean-deep),
+                black);
+            color: white;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            margin: 0;
+        
+        }
+        
+        body::after {
+            position: fixed;
+            content: '';
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: radial-gradient(circle at center, transparent, rgba(0, 0, 0, 0.5));
+            z-index: 1;
+        }
+        
+/* =============== Header =============== */
+header {
+    position: fixed;
+    width: 100%;
+    height: 60px;
+    background-color: #bca791;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 100;
+}
+
+header .logo {
+    font-size: 2em;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #2d2512;
+}
+
+#menuToggle {
+    font-size: 24px;
+    cursor: pointer;
+    display: none;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin: 10px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    padding: 6px 15px;
+    color: #412812;
+    border-radius: 20px;
+    font-size: 16px;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+    background: #cfbe9f;
+    color: black;
+}
+
+/* =============== Mobile Fullscreen Menu =============== */
+@media (max-width: 1024px) {
+    #menuToggle {
+        display: block;
+        z-index: 101;
+    }
+
+    nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translateY(-100%);
+        transition: 0.5s ease;
+    }
+
+    nav.active {
+        transform: translateY(0);
+    }
+
+    nav ul {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    nav ul li {
+        margin: 20px 0;
+    }
+
+    nav ul li a {
+        font-size: 24px;
+        color: white;
+    }
+}
+
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+              padding-top: 60px;
+        }
+        
+        /* Aquatic Animation Elements */
+        .indicator {
+            text-align: center;
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translate3d(-50%, 0, 0);
+            font-size: 1.2rem;
+            z-index: 10;
+        }
+        
+        .indicator span {
+            display: block;
+        }
+        
+        .indicator span:nth-child(2) {
+            animation: arrowMove 600ms infinite alternate;
+        }
+        
+        @keyframes arrowMove {
+            to {
+                transform: translate3d(0, 0.5rem, 0);
+            }
+        }
+        
+        .fish-wrapper {
+            --mask: linear-gradient(180deg, rgba(0, 0, 0, 1.0), transparent);
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            perspective: 100rem;
+            perspective-origin: center center;
+            transform-style: preserve-3d;
+            pointer-events: none;
+            -webkit-mask-image: var(--mask);
+            mask-image: var(--mask);
+            z-index: 10;
+        }
+        
+        .fish {
+            --bodyW: 2rem;
+            --o: 0.95;
+            --l: 100%;
+            --c: hsla(250deg, 50%, var(--l), var(--o, 0.6));
+            --size: 10rem;
+            position: relative;
+            width: var(--size);
+            height: var(--size);
+            transform-style: preserve-3d;
+            transform-origin: center;
+        }
+        
+        .fish__skeleton {
+            --clip: polygon(0 var(--bodyW), 45% 0, 55% 0, 100% var(--bodyW), 50% 100%);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(0deg, var(--c), var(--c) 0.1rem, transparent 0, transparent 0.5rem),
+                linear-gradient(var(--c) var(--bodyW), transparent var(--bodyW)), 
+                linear-gradient(90deg, transparent calc((var(--bodyW) / 2) - 0.1rem), var(--c) 0, var(--c) calc((var(--bodyW) / 2) + 0.1rem), transparent 0);
+            top: calc(var(--bodyW) / 4);
+            left: calc(var(--bodyW) * 0.75);
+            width: var(--bodyW);
+            height: calc(var(--bodyW) * 4);
+            -webkit-clip-path: var(--clip);
+            clip-path: var(--clip);
+            opacity: 0;
+            transform: translate3d(0, 0, calc(var(--bodyW) / -2)) rotate(90deg);
+            transform-origin: center center;
+        }
+        
+        .fish__inner {
+            --a: 9.5deg;
+            width: calc(var(--bodyW) * 1.5);
+            height: var(--size);
+            transform-style: preserve-3d;
+            transform: rotate(90deg);
+        }
+        
+        .fish__body {
+            --l: 75%;
+            --c: hsla(250deg, 50%, var(--l), var(--o, 0.6));
+            position: absolute;
+            top: var(--bodyW);
+            left: 0;
+            width: var(--bodyW);
+            height: calc(3 * var(--bodyW));
+            background: var(--c);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform: translateZ(calc(var(--bodyW) / -2)) rotateX(var(--a));
+            transform-origin: center top;
+        }
+        
+        .fish__body:nth-child(2) {
+            --i: 2;
+            --l: 75%;
+            transform: translateZ(calc(var(--bodyW) / 2)) rotateX(calc(var(--a) * -1));
+        }
+        
+        .fish__body:nth-child(3) {
+            --i: 3;
+            --l: 95%;
+            transform: rotateY(90deg) translate3d(calc(var(--bodyW) / -2), 0, 0) rotateX(var(--a));
+            transform-origin: left top;
+        }
+        
+        .fish__body:nth-child(4) {
+            --i: 4;
+            --l: 50%;
+            transform: rotateY(90deg) translate3d(calc(var(--bodyW) / 2), 0, 0) rotateX(calc(var(--a) * -1));
+            transform-origin: right top;
+        }
+        
+        .fish__head {
+            --a: 23.5deg;
+            --l: 85%;
+            --c: hsla(250deg, 50%, var(--l), var(--o, 0.6));
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: var(--bodyW);
+            height: var(--bodyW);
+            background: var(--c);
+            clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%);
+            transform: translateZ(calc(var(--bodyW) / 2)) rotateX(var(--a));
+            transform-origin: center bottom;
+        }
+        
+        .fish__head--2 {
+            --i: 2;
+            --l: 80%;
+            transform: translateZ(calc(var(--bodyW) / -2)) rotateX(calc(var(--a) * -1));
+        }
+        
+        .fish__head--3 {
+            --i: 3;
+            --l: 90%;
+            transform: rotateY(90deg) translate3d(calc(var(--bodyW) / -2), 0, 0) rotateX(calc(var(--a) * -1));
+            transform-origin: left bottom;
+        }
+        
+        .fish__head--4 {
+            --l: 55%;
+            transform: rotateY(90deg) translate3d(calc(var(--bodyW) / 2), 0, 0) rotateX(var(--a));
+            transform-origin: right bottom;
+        }
+        
+        .fish__tail-main {
+            --o: 0.9;
+            --l: 90%;
+            --c: hsla(250deg, 50%, var(--l), var(--o, 0.6));
+            width: var(--bodyW);
+            height: var(--bodyW);
+            background-color: var(--c);
+            position: absolute;
+            left: 0;
+            bottom: var(--bodyW);
+            clip-path: polygon(50% 0, 100% 100%, 0 100%);
+        }
+        
+        .fish__tail-fork {
+            --o: 0.9;
+            --l: 95%;
+            --c: hsla(250deg, 50%, var(--l), var(--o, 0.6));
+            width: var(--bodyW);
+            height: var(--bodyW);
+            background-color: var(--c);
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 90% 100%, 70% 70%, 50% 30%, 30% 70%, 10% 100%, 0 70%);
+            transform-origin: top center;
+            transform: rotateX(-45deg);
+            animation: tail 1000ms infinite alternate;
+        }
+        
+        .fish__fin {
+            width: calc(var(--bodyW) / 8 * 3);
+            height: var(--bodyW);
+            background-color: var(--c);
+            position: absolute;
+            top: calc(var(--bodyW) * 1.5);
+            left: calc(var(--bodyW) / 8 * 3);
+            clip-path: polygon(50% 0, 100% 30%, 100% 60%, 50% 100%, 0 60%, 0 30%);
+            transform-origin: top center;
+            transform: translateZ(calc(var(--bodyW) / 2)) rotateY(0deg) rotateX(5deg) rotate(10deg);
+            animation: fin 1500ms infinite alternate linear;
+        }
+        
+        .fish__fin--2 {
+            transform: translateZ(calc(var(--bodyW) / -2)) rotateY(0deg) rotateX(-5deg) rotate(10deg);
+            animation: fin2 1500ms infinite alternate linear;
+        }
+        
+        @keyframes tail {
+            to {
+                transform: rotateX(45deg);
+            }
+        }
+        
+        @keyframes fin {
+            100% {
+                transform: translateZ(calc(var(--bodyW) / 2)) rotateY(10deg) rotateX(20deg) rotate(-10deg);
+            }
+        }
+        
+        @keyframes fin2 {
+            100% {
+                transform: translateZ(calc(var(--bodyW) / -2)) rotateY(-10deg) rotateX(-20deg) rotate(-10deg);
+            }
+        }
+        
+        /* Lights */
+        .lights {
+            position: fixed;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 10;
+        }
+        
+        .lights__group {
+            position: relative;
+            height: 100%;
+        }
+        
+        .lights__light {
+            --size: 0.35rem;
+            width: var(--size);
+            height: var(--size);
+            position: absolute;
+            background: rgba(255, 255, 255, 1);
+            border-radius: 100%;
+            top: 10%;
+            left: 25%;
+            filter: blur(0.1rem);
+            animation: blink 2500ms var(--d, 0ms) infinite alternate;
+        }
+        
+        .lights__light:nth-child(2) {
+            --d: 200ms;
+            top: 40%;
+            left: 12%;
+        }
+        
+        .lights__light:nth-child(3) {
+            --d: 350ms;
+            top: 60%;
+            left: 18%;
+        }
+        
+        .lights__light:nth-child(4) {
+            --d: 600ms;
+            top: 25%;
+            left: 66%;
+        }
+        
+        .lights__light:nth-child(5) {
+            --d: 1210ms;
+            top: 43%;
+            left: 55%;
+        }
+        
+        .lights__light:nth-child(6) {
+            --d: 420ms;
+            top: 90%;
+            left: 37%;
+        }
+        
+        .lights__light:nth-child(7) {
+            --d: 1100ms;
+            top: 82%;
+            left: 91%;
+        }
+        
+        .lights__light:nth-child(8) {
+            --d: 1560ms;
+            top: 67%;
+            left: 81%;
+        }
+        
+        @keyframes blink {
+            to {
+                opacity: 0;
+            }
+        }
+        
+        /* Rays */
+        .rays {
+            --r: 10deg;
+            --c: rgba(255, 251, 227, 0.2);
+            --size: max(60vh, 80rem);
+            --mask: radial-gradient(circle at center, black, transparent 50%);
+            position: fixed;
+            pointer-events: none;
+            top: calc(var(--size) * -0.55);
+            left: 50%;
+            width: var(--size);
+            height: var(--size);
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .rays > div {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: repeating-conic-gradient(var(--c), var(--c) var(--r), transparent var(--r), transparent calc(var(--r) * 2));
+            -webkit-mask-image: var(--mask);
+            mask-image: var(--mask);
+        }
+        
+        /* Bubbles */
+        .bubbles {
+            position: fixed;
+            top: 0;
+            left: 5rem;
+            transform-origin: center;
+            transform: translate3d(10rem, 5rem, 0) rotateX(20deg) rotateY(0deg);
+            z-index: 2;
+        }
+        
+        .bubbles__inner {
+            width: 10rem;
+            height: 10rem;
+        }
+        
+        .bubbles__bubble {
+            --c: rgba(255, 255, 255, 0.4);
+            --size: 2.5rem;
+            position: absolute;
+            width: var(--size);
+            height: var(--size);
+            border-radius: 50%;
+            background: radial-gradient(transparent 30%, var(--c, white)), radial-gradient(circle at 100% 0%, transparent 30%, var(--c, white));
+            transform-origin: center;
+            transform: scale(0);
+            opacity: 0;
+        }
+        
+        .bubbles__bubble:nth-child(2) {
+            --size: 1.8rem;
+            top: 3rem;
+            left: 2rem;
+        }
+        
+        .bubbles__bubble:nth-child(3) {
+            --size: 1.2rem;
+            top: 6rem;
+            left: 0;
+        }
+        
+        /* Examination Header Styles */
+.exam-header {
+    background: linear-gradient(135deg, #418812, #412812);
+    color: white;
+    padding: 60px 0 80px;
+    text-align: center;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    position: relative;
+    overflow: hidden;
+    margin-top: 0; /* Adjust based on your existing header */
+}
+
+.exam-header-decoration {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#exam-decoration1 {
+    top: -150px;
+    left: -100px;
+}
+
+#exam-decoration2 {
+    bottom: -150px;
+    right: -100px;
+}
+
+.exam-header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+}
+
+.exam-main-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    margin-top: 15px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.exam-subtitle {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .exam-header {
+        padding: 40px 0 60px;
+    }
+    
+    .exam-main-title {
+        font-size: 2rem;
+        margin-top: 10vh;
+    }
+    
+    .exam-subtitle {
+        font-size: 1rem;
+    }
+    
+    .exam-header-decoration {
+        width: 200px;
+        height: 200px;
+    }
+}
+        .exam-overview {
+            padding: 80px 0;
+            position: relative;
+            z-index: 3;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .section-title .underline {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-green), var(--light-green));
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+        
+        .exam-structure {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+        
+        .structure-card {
+            flex: 1 1 300px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 85%;
+            transform: translateY(30px);
+        }
+        
+        .structure-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .structure-card h3 {
+            color: var(--light-green);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .structure-card .icon {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(194, 216, 197, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: white;
+            font-size: 1.5rem;
+            border: 2px solid var(--light-green);
+        }
+        
+        .evaluation-process {
+            background-color: rgba(65, 40, 18, 0.3);
+            padding: 60px 0;
+            border-radius: 10px;
+            margin-bottom: 80px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .process-steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .process-step {
+            flex: 0 0 calc(33.333% - 20px);
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 80%;
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border: 2px solid var(--light-green);
+        }
+        
+        .grading-scale {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 80%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(194, 216, 197, 0.3);
+        }
+        
+        th {
+            background-color: rgba(65, 136, 18, 0.5);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: rgba(194, 216, 197, 0.05);
+        }
+        
+        .highlight {
+            font-weight: bold;
+            color: var(--light-green);
+        }
+        
+        
+/* footer */
+footer {
+    background: #BCA791;
+    color: #2D2512;
+    padding: 50px 10%;
+    padding-top: 80px;
+    text-align: center;
+    font-family: 'Caveat', cursive;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+    padding-top: 30px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+}
+
+.footer-section h3 {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #412812;
+    letter-spacing: 0.5px;
+}
+
+.footer-section p {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin: 12px 0;
+}
+
+.footer-section ul li a {
+    text-decoration: none;
+    color: #2D2512;
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.3s;
+    letter-spacing: 0.3px;
+}
+
+.footer-section ul li a:hover {
+    color: #9f998c;
+}
+
+.copyright {
+    text-align: center;
+    padding-top: 30px;
+    font-size: 16px;
+}
+
+.credits {
+    text-align: center;
+    font-size: 15px;
+    color: #2D2512;
+}
+.credits a {
+  /* Amazing font: Use 'Lobster' for a different stylish look */
+  font-family: 'Lobster', cursive, Arial, sans-serif;
+  font-size: 1em;
+  text-decoration: none;
+  background: linear-gradient(90deg, #ff6a00, #ee0979, #00c3ff, #ffff1c);
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-move 3s linear infinite;
+  transition: text-shadow 0.3s;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.08);
+}
+
+@keyframes gradient-move {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.credits a:hover {
+  text-shadow: 0 0 10px #fff, 0 0 20px #ff6a00, 0 0 40px #ee0979;
+}
+.footer-section .social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.social-icons a {
+    text-decoration: none;
+    color: #2D2512;
+    font-size: 28px;
+    transition: transform 0.3s ease, color 0.3s;
+}
+
+@media (max-width: 1024px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-section {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    
+    .footer-section h3 {
+        font-size: 24px;
+    }
+    
+    .footer-section p,
+    .footer-section ul li a {
+        font-size: 20px;
+    }
+    
+    .social-icons a {
+        font-size: 32px;
+    }
+}
+
+/* Go to Top Button - Responsive Left Position */
+.go-top-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 44px;
+  height: 44px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 75;
+  padding: 0;
+  margin: 0;
+}
+
+.go-top-btn.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.go-top-btn:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+  transform: translateY(-3px);
+}
+
+.arrow-up {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.go-top-text {
+  font-size: 9px;
+  margin-top: 1px;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .go-top-btn {
+    width: 50px;
+    height: 50px;
+    right: 30px;
+    bottom: 30px;
+  }
+  
+  .arrow-up {
+    font-size: 20px;
+  }
+  
+  .go-top-text {
+    font-size: 10px;
+  }
+}
+
+/* Very small devices (phones, 400px and below) */
+@media (max-width: 400px) {
+  .go-top-btn {
+    width: 40px;
+    height: 40px;
+    right: 15px;
+    bottom: 15px;
+  }
+  
+  .arrow-up {
+    font-size: 16px;
+  }
+  
+  .go-top-text {
+    font-size: 8px;
+  }
+}
+
+
+        @media (max-width: 768px) {
+            
+            
+            .process-step {
+                flex: 0 0 100%;
+            }
+            
+            .fish {
+                --size: 8rem;
+                --bodyW: 1.5rem;
+            }
+        }
